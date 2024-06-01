@@ -3,3 +3,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.conteyner {
+  background-color: rgb(16, 104, 255);
+}
