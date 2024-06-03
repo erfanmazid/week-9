@@ -4,8 +4,19 @@
   box-sizing: border-box;
 }
 
-.conteyner {
+body {
   width: 100vw;
   height: 100vh;
   background-color: rgb(16, 104, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 30%;
+  height: 25%;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 21px 20px 15px -3px rgba(0, 0, 0, 0.1);
 }
