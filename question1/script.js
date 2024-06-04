@@ -1,4 +1,5 @@
 const container = document.querySelector(".container");
+const loading = document.querySelector(".loading");
 
 const input = document.getElementById("input");
 const btn = document.getElementById("btn");
@@ -20,7 +21,6 @@ function fetchCountry(countryName) {
 
 function renderCountry(country) {
   // console.log("clicked");
-  console.log(country);
 
   countryDiv.style.display = "block";
 
@@ -31,15 +31,16 @@ function renderCountry(country) {
 
   let language = Object.values(country[0].languages);
   let currencie = Object.values(country[0].currencies);
-  console.log(currencie[0]);
 
   capital.innerHTML = "capital: " + country[0].capital[0];
   continent.innerHTML = "continent: " + country[0].continents[0];
   population.innerHTML = "population: " + country[0].population;
   currencies.innerHTML = "currencies: " + currencie[0].name;
   languages.innerHTML = "languages: " + language;
+  loading.style.display = "none";
 }
 
 btn.addEventListener("click", () => {
+  loading.style.display = "block";
   fetchCountry(input.value);
 });
