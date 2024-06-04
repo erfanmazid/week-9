@@ -3,6 +3,15 @@ const container = document.querySelector(".container");
 const input = document.getElementById("input");
 const btn = document.getElementById("btn");
 
+const countryDiv = document.querySelector(".country");
+const countryflag = document.getElementById("countryflag");
+const countryName = document.getElementById("country-name");
+const capital = document.getElementById("capital");
+const continent = document.getElementById("continent");
+const population = document.getElementById("population");
+const currencies = document.getElementById("currencies");
+const languages = document.getElementById("languages");
+
 function fetchCountry(countryName) {
   fetch(`https://restcountries.com/v3.1/name/${countryName}?fullText=true`)
     .then((response) => response.json() || console.log(response))
@@ -11,12 +20,26 @@ function fetchCountry(countryName) {
 
 function renderCountry(country) {
   // console.log("clicked");
-  // console.log(country);
+  console.log(country);
+
+  countryDiv.style.display = "block";
 
   const flag = country[0].flags.png;
+  countryflag.src = flag;
+
+  countryName.innerHTML = input.value.toUpperCase();
+
+  let language = Object.values(country[0].languages);
+  let currencie = Object.values(country[0].currencies);
+  console.log(currencie[0]);
+
+  capital.innerHTML = "capital: " + country[0].capital[0];
+  continent.innerHTML = "continent: " + country[0].continents[0];
+  population.innerHTML = "population: " + country[0].population;
+  currencies.innerHTML = "currencies: " + currencie[0].name;
+  languages.innerHTML = "languages: " + language;
 }
 
 btn.addEventListener("click", () => {
   fetchCountry(input.value);
 });
-fetchCountry();
