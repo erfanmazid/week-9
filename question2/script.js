@@ -6,16 +6,24 @@ const submit = document.getElementById("submit");
 
 const tbody = document.querySelector("tbody");
 
+const pagination = document.querySelector(".pagination");
+
+let page = 1;
+let pagesNum = 0;
 let userNum = 0;
 
 fetch(`${baseUrl}/users`)
   .then((res) => res.json())
   .then((data) => (userNum = data.length));
 
+fetch(`http://localhost:3000/users/?_page=${page}&_per_page=6`)
+  .then((res) => res.json())
+  .then((data) => (pagesNum = data.pages));
+
 function fetchUser() {
-  fetch(`${baseUrl}/users`)
+  fetch(`http://localhost:3000/users/?_page=${page}&_per_page=6`)
     .then((res) => res.json())
-    .then((data) => renderUser(data));
+    .then((data) => renderUser(data.data));
 }
 
 function renderUser(users) {
@@ -35,6 +43,7 @@ function renderUser(users) {
 
     const btnTd = document.createElement("td");
     const btn = document.createElement("button");
+    // const delet
     btn.textContent = "delete";
     btn.setAttribute("onclick", `deleteUser(${user.id})`);
     btnTd.appendChild(btn);
@@ -92,9 +101,25 @@ function deleteUser(id) {
   fetchUser();
 }
 
+function paginationBtn() {
+  //   pagination.innerHTML = "";
+  for (let i = 1; i <= pagesNum; i++) {
+    const nwDiv = document.createElement("div");
+    const newP = document.createElement("p");
+
+    nwDiv.setAttribute("onclick", `${(page = i)}`);
+
+    newP.textContent = i;
+    nwDiv.appendChild(newP);
+
+    pagination.appendChild(nwDiv);
+  }
+}
+
 submit.addEventListener("click", (e) => {
   e.preventDefault();
   addUser();
 });
 
 fetchUser();
+paginationBtn();
