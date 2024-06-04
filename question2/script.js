@@ -8,7 +8,7 @@ const tbody = document.querySelector("tbody");
 
 const pagination = document.querySelector(".pagination");
 
-let page = 1;
+let pageNow = 1;
 let pagesNum = 0;
 let userNum = 0;
 
@@ -16,12 +16,8 @@ fetch(`${baseUrl}/users`)
   .then((res) => res.json())
   .then((data) => (userNum = data.length));
 
-fetch(`http://localhost:3000/users/?_page=${page}&_per_page=6`)
-  .then((res) => res.json())
-  .then((data) => (pagesNum = data.pages));
-
 function fetchUser() {
-  fetch(`http://localhost:3000/users/?_page=${page}&_per_page=6`)
+  fetch(`http://localhost:3000/users/?_page=${pageNow}&_per_page=6`)
     .then((res) => res.json())
     .then((data) => renderUser(data.data));
 }
@@ -101,19 +97,34 @@ function deleteUser(id) {
   fetchUser();
 }
 
-function paginationBtn() {
-  //   pagination.innerHTML = "";
-  for (let i = 1; i <= pagesNum; i++) {
-    const nwDiv = document.createElement("div");
-    const newP = document.createElement("p");
+async function paginationBtn() {
+  pagination.innerHTML = "";
+  await fetch(`http://localhost:3000/users/?_page=${pageNow}&_per_page=6`)
+    .then((res) => res.json())
+    .then((data) => (pagesNum = data.pages));
 
-    nwDiv.setAttribute("onclick", `${(page = i)}`);
-
-    newP.textContent = i;
-    nwDiv.appendChild(newP);
-
-    pagination.appendChild(nwDiv);
+  for (let i = 1; i < pagesNum + 1; i++) {
+    let btnNumber = btnCreat(i);
+    pagination.appendChild(btnNumber);
   }
+}
+
+function btnCreat(page) {
+  let btnNew = document.createElement("button");
+  btnNew.textContent = page;
+  //   btnNew.setAttribute("onclick", `${(pageNow = page)}`);
+
+  if (page === pageNow) {
+    btnNew.style.backgroundColor = "green";
+  }
+
+  btnNew.addEventListener("click", () => {
+    pageNow = page;
+    fetchUser();
+    paginationBtn();
+  });
+
+  return btnNew;
 }
 
 submit.addEventListener("click", (e) => {
